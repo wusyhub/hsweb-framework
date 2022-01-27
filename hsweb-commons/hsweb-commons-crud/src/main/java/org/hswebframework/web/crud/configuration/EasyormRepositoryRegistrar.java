@@ -1,15 +1,14 @@
 package org.hswebframework.web.crud.configuration;
 
-import lombok.*;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.hswebframework.ezorm.rdb.mapping.defaults.DefaultReactiveRepository;
 import org.hswebframework.ezorm.rdb.mapping.defaults.DefaultSyncRepository;
 import org.hswebframework.utils.ClassUtils;
-import org.hswebframework.web.crud.annotation.EnableEasyormRepository;
-import org.hswebframework.web.api.crud.entity.ImplementFor;
-import org.hswebframework.web.crud.annotation.Reactive;
 import org.hswebframework.web.api.crud.entity.GenericEntity;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.hswebframework.web.api.crud.entity.ImplementFor;
+import org.hswebframework.web.crud.annotation.EnableEasyormRepository;
+import org.hswebframework.web.crud.annotation.Reactive;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -23,7 +22,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 
@@ -85,7 +83,7 @@ public class EasyormRepositoryRegistrar implements ImportBeanDefinitionRegistrar
 //            String className = reader.getClassMetadata().getClassName();
             Class<?> entityType = org.springframework.util.ClassUtils.forName(className, null);
             if (Arrays.stream(anno)
-                      .noneMatch(ann -> AnnotationUtils.findAnnotation(entityType, ann) != null)) {
+                    .noneMatch(ann -> AnnotationUtils.findAnnotation(entityType, ann) != null)) {
                 continue;
             }
 
@@ -120,10 +118,10 @@ public class EasyormRepositoryRegistrar implements ImportBeanDefinitionRegistrar
             }
 
             EntityInfo entityInfo = new EntityInfo(genericType,
-                                                   entityType,
-                                                   idType,
-                                                   reactiveEnabled,
-                                                   nonReactiveEnabled);
+                    entityType,
+                    idType,
+                    reactiveEnabled,
+                    nonReactiveEnabled);
             if (!entityInfos.contains(entityInfo) || implementFor != null) {
                 entityInfos.add(entityInfo);
             }
@@ -168,7 +166,7 @@ public class EasyormRepositoryRegistrar implements ImportBeanDefinitionRegistrar
             definition.setBeanClass(AutoDDLProcessor.class);
             definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
             definition.getPropertyValues().add("entities", entityInfos);
-            definition.getPropertyValues().add("reactive", entry.getKey());
+            definition.getPropertyValues().add("reactive", nonReactiveEnabled ? false : entry.getKey());
             definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
             definition.setSynthetic(true);
             registry.registerBeanDefinition(AutoDDLProcessor.class.getName() + "_" + count.incrementAndGet(), definition);

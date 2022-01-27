@@ -1,5 +1,6 @@
 package org.hswebframework.web.file.service;
 
+import org.hswebframework.web.file.model.FileMetadata;
 import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Mono;
 
@@ -29,4 +30,13 @@ public interface FileStorageService {
      * @return 文件访问地址
      */
     Mono<String> saveFile(InputStream inputStream, String fileType);
+
+    /**
+     * 获取文件
+     *
+     * @param bucket
+     * @param fileId
+     * @return
+     */
+    Mono<FileMetadata> getFile(String bucket, String fileId);
 }

@@ -6,8 +6,6 @@
         <artifactId>hsweb-datasource</artifactId>
         <groupId>org.hswebframework.web</groupId>
         <version>${reversion}</version>
-
-        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
